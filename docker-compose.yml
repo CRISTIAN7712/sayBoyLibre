@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart : always
+    ports:
+      - "27017:27017"
+    volumes:
+      - /Documents/botSaybot/base-baileys-memory/data:/data/db
+    networks:
+      - mongo-network
+  
+  mongo-express:
+    image: mongo-express:0.54
+    container_name: mongo-express
+    ports:
+      - 8081-8081
+    depends_on:
+      - mongo
+    environment:
+      ME-CONFIG-BASICAUTH_USERNAME: root
+      ME-CONFIG-BASICAUTH_PASSWORD: root
+      ME-CONFIG-BASICAUTH_PORT: 27017
+      ME-CONFIG-BASICAUTH_ADMINUSERNAME: root
+      ME-CONFIG-BASICAUTH_ADMINPASSWORD: root
+    links:
+      -mongo
+    networks:
+      - mongo-network
+
+networks:
+  mongo-network:
+    driver: bridge
